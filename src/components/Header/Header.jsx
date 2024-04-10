@@ -1,8 +1,14 @@
 import React, { useState } from 'react'
-import {useNavigate} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
+import {LogoutBtn} from '../index'
+import {useSelector} from 'react-redux'
+import authSlice from '../../store/authSlice'
+
+
+
 
 function Header() {
-  const authStatus = true
+  const authStatus = useSelector((state) => state.auth.status)
 
   let [open, setOpen] = useState(false);
 
@@ -14,16 +20,6 @@ function Header() {
       slug: "/",
       active: true
     }, 
-    {
-      name: "Login",
-      slug: "/login",
-      active: !authStatus,
-  },
-  {
-      name: "Signup",
-      slug: "/signup",
-      active:  !authStatus,
-  },
   {
       name: "Admin",
       slug: "/admin-dashboard",
@@ -33,6 +29,16 @@ function Header() {
     name: "Gallery",
     slug: "/gallery",
     active: true,
+},
+{
+  name: "Login",
+  slug: "/login",
+  active: !authStatus,
+},
+{
+  name: "Signup",
+  slug: "/signup",
+  active:  !authStatus,
 },
   ]
   return (
@@ -73,7 +79,8 @@ function Header() {
             {/* logout button goes here */}
             {authStatus && (
               <li>
-              <button className='inline-bock px-6 py-2 duration-200 hover:bg-blue-100 hover:text-indigo-400 rounded-full' onClick={() => navigate("/login")}>Logout</button>
+                <LogoutBtn/>
+              {/* <button className='inline-bock px-6 py-2 duration-200 hover:bg-blue-100 hover:text-indigo-400 rounded-full' onClick={() => navigate("/login")}>Logout</button> */}
               </li>
             )}
                 {/* logout button ends here */}

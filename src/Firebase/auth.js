@@ -2,6 +2,7 @@ import {createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signOut,
     GoogleAuthProvider,
+    onAuthStateChanged,
     signInWithPopup} from "firebase/auth";
 
 import {auth} from "../../firebase"
@@ -49,13 +50,16 @@ console.log(userAccount);
     }
 
     // current user
-    // async getCurrentUser(){
-    //     try {
-    //         return await getCurrentUser()
-    //     } catch (error) {
-    //         throw error;
-    //     }
-// }
+    async getCurrentUser(){
+        try {
+            return await auth.currentUser;
+            // await onAuthStateChanged(auth, (user) => {
+            //      return user
+            // })
+        } catch (error) {
+            throw error;
+        }
+}
 
     // google signup
 
@@ -63,7 +67,7 @@ console.log(userAccount);
         try {
             const googleAuthProvider = new GoogleAuthProvider();
           const user =  await signInWithPopup(auth, googleAuthProvider);
-            console.log(user);
+           return user;
           } catch (error) {
            throw error 
           }

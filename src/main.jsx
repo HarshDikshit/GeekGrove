@@ -8,6 +8,8 @@ import SignUp from './pages/SignUp.jsx'
 import Login from './pages/Login.jsx'
 import Admin from './pages/Admin.jsx'
 import Gallery from './pages/Gallery.jsx'
+import {Provider} from 'react-redux'
+import store from './store/store.js'
 
 const router = createBrowserRouter([
   {
@@ -27,7 +29,7 @@ const router = createBrowserRouter([
         {
             path: "/signup",
             element: (
-              <Login/>
+              <SignUp/>
             ),
         },
         {
@@ -49,7 +51,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+    <Provider store={store}>
     <RouterProvider router={router}/>
-   
+    </Provider>
   </React.StrictMode>,
 )

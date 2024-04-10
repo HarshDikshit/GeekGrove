@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Alert from '../Alert';
+import {useSelector} from 'react-redux'
  
 
 function Footer() {
@@ -9,15 +10,23 @@ function Footer() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState("")
 
+  const authStatus = useSelector((state) => state.auth.status)
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(title === "" && description === ""){
+    if (authStatus){
+      if(title === "" || description === ""){
+        setSuccess('')
+        setError('Kindly fill required fields!!')
+      } else{
+        setError("")
+        setSuccess('Success!! your feedback added successfully')
+      }
+    }else{
       setSuccess('')
-      setError('Kindly fill required fields!!')
-    } else{
-      setError("")
-      setSuccess('Success!! your feedback added successfully')
+      setError('Kindly login first to push feedback')
     }
+    
   }
 return (
     <>
@@ -36,8 +45,8 @@ overflow-hidden pt-10 bg-gray-400 border border-t-2 border-t-gray-300'>
     <h1 className=' justify-self-center text-gray-800 uppercase font-bold text-2xl my-2'>Feedback</h1>
     </div>
     {/* title input */}
-
-    <input type="text" className=' bg-gray-700 rounded-md px-2 py-1 text-md w-full my-2 border border-[3px] border-gray-300 text-white' placeholder="Enter Title Here..." value={title}
+<label htmlFor="title" className=' font-semibold'> <span className=' text-red-700 font-semibold'>*</span> Title:</label>
+    <input id='title' type="text" className=' bg-gray-700 rounded-md px-2 py-1 text-md w-full my-2 border border-[3px] border-gray-300 text-white' placeholder="Enter Title Here..." value={title}
     onChange={(em) => {
       setTitle(em.target.value)
     }} />
@@ -45,14 +54,16 @@ overflow-hidden pt-10 bg-gray-400 border border-t-2 border-t-gray-300'>
 
 
     {/* description text area goes here */}
-    <textarea name="" id="" rows="5" className=' text-white w-full my-2 bg-gray-700 rounded-md px-2 py-1 text-md border border-[3px] border-gray-300' placeholder='Enter Description Here...'
+    <label htmlFor="description" className=' font-semibold capitalize'> <span className=' text-red-700 font-semibold'>*</span> description:</label>
+
+    <textarea name="" id="description" rows="5" className=' text-white w-full my-2 bg-gray-700 rounded-md px-2 py-1 text-md border border-[3px] border-gray-300' placeholder='Enter Description Here...'
     onChange={(e) => {
       setDescription(e.target.value)
     }}/>
 
-    <div className=' flex justify-center text-red-700 bg'>
+    <div className= {`${error? 'block' : 'hidden'} flex justify-center text-red-700 bg-red-200 rounded-md border-[2px] border-red-300 mb-2`}>
     {error!== "" && error} </div>
-    <div className=' flex justify-center text-green-700'>
+    <div className={`${success? "block": "hidden"} flex justify-center text-green-700 bg-green-200 rounded-md border-[2px] border-green-300 mb-2`}>
     {success !== "" && success}
     </div>
 
