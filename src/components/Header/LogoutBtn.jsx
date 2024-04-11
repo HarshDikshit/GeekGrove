@@ -1,6 +1,6 @@
 import React from 'react'
 import {useDispatch} from 'react-redux'
-import { logout as authLogout } from '../../store/authSlice'
+import { logout as authLogout, disableAdmin } from '../../store/authSlice'
 import authService from '../../Firebase/auth'
  
 
@@ -10,6 +10,7 @@ function LogoutBtn() {
       try {
         await authService.logOut().then(() => {
           dispatch( authLogout())
+          dispatch(disableAdmin())
       })
       } catch (error) {
         console.log(error);

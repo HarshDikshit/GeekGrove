@@ -1,36 +1,37 @@
 import { deleteObject, ref, uploadBytes } from "firebase/storage";
 import { db, storage } from "../../firebase";
-import {doc,addDoc, collection, updateDoc, deleteDoc, getDocs  } from "firebase/firestore";
+import {doc, collection, addDoc, documentId, updateDoc, deleteDoc, getDocs, setDoc, getDoc  } from "firebase/firestore";
+import { v4 } from "uuid";
 
 
 
 export class Service{
 
     // add docs 
-    async createDoc(Ref,{dataObject}){
+    async createUserDoc({uid,name,email,isAdmin, createdAt}){
         try {
-            const dbref = doc(db, Ref)
-            return await addDoc(dbref, dataObject);
+            const dbref = doc(db, "user", uid)
+            return await setDoc(dbref, {name, email,isAdmin, createdAt});
         } catch (error) {
             throw error;
         }
     }
 
     // get docs
-    async getDocs({ref}){
+    async getUserDocs({uid}){
         try {
-             const dbref = doc(db, ref)
-            return await getDocs(dbref);
+             const dbref = doc(db,'user', uid)
+            return await getDoc(dbref);
         } catch (error) {
             throw error;
         }
     }
 
     // uodate
-    async updateDoc ({dbref, id, updatedObj}){
-        const updateRef = doc(dbref, id);
+    async updateDoc ({uid,email, comments, updatedAt}){
+        const updateRef = doc(db,'user', uid);
         try {
-            return await updateDoc(updateRef, updatedObj);
+            return await updateDoc(updateRef, {email,  comments, updatedAt});
 
         } catch (error) {
             throw error;
@@ -77,7 +78,17 @@ export class Service{
         }
     }
 
+    // ------comments--------
+     async updateComments({uid, comments}){
+        const commRef = collection(db,'comments');
+        
+        try {
+            return await addDoc(commRef, {uid, comments});
 
+        } catch (error) {
+            throw error;
+        }
+     }
 }
 
 const service = new Service();

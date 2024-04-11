@@ -1,10 +1,22 @@
   import React from 'react'
+  import service from '../Firebase/conf'
+  import authService from '../Firebase/auth'
   
   
 
  
 
   function Home() {
+
+    const find = async()=>{
+      await authService.getCurrentUser()
+      .then(async(user) => {
+        await service.getUserDocs({uid: user.uid})
+        .then((data) => console.log(data.data().email))
+        .catch((e)=> console.log(e))
+      })
+      .catch((e)=> {console.log(e.code);})
+    }
 
   return (
   <>
@@ -13,7 +25,9 @@
   <div className=" flex flex-wrap justify-center">
 
     {/* card goes here */}
-    <div className=" bg-white flex flex-col my-4 rounded-lg border-[5px] shadow-sm mx-2 justify-center shadow-black ">
+    <div className=" bg-white flex flex-col my-4 rounded-lg border-[5px] shadow-sm mx-2 justify-center shadow-black "
+    onClick={find}
+    >
       
       <img className=' w-[200px] mb-3' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAQxJREFUSEvtl08OwUAUh78uuAEOYImEC4g/cQBL1+ACTsAVLCwsrewEeyt7YukU6CRTqaYz2jEMSSdp0nbee9+837xMXz0cDc8RFxU4D3SBBiDuTccV2AOraIA4cBVYA0VTWozfAhiE38eBD0DNIjQIVQZOwUMUXAIucnICjN5cQAvYyBhtYKsCN4GdnOyEnEz5icFKQ588TkEXmYnLCviWAhzI+t/gFAk/TK1knIGTKJBJrTy5dAdIEmmjNpnUvy21yZ7qfLSfxXAxOAMfgblF+gw4J2kE+sDSIvgplK71mQLDb4EF51PNnra4BLgie62C5WxfggVPNPE9f4/rQM7SArTFZYnxOoyzf6c7cxJbH+wvzggAAAAASUVORK5CYII="/>
 

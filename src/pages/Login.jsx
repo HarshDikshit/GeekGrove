@@ -1,13 +1,17 @@
-import { faEye } from '@fortawesome/free-regular-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useState } from 'react'
 import authService from '../Firebase/auth'
-import { login as authLogin, logout } from '../store/authSlice'
+import { login as authLogin, logout, checkAdmin } from '../store/authSlice'
 import {useDispatch} from 'react-redux'
 import {useNavigate} from 'react-router-dom'
 import service from '../Firebase/conf'
+import { serverTimestamp } from 'firebase/firestore'
+import { Loading } from '../components'
+
 
 function Login() {
+
+  const [loading, setLoading] = useState(false)
+  const [googleLoading, setGoogleLoading] = useState(false)
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -17,39 +21,46 @@ function Login() {
 const dispatch = useDispatch()
 const navigate = useNavigate()
 
-
+  // login handler email/password
   const handleLogin = async() => {
     if(email === "" || password === ""){
       setSuccess('')
       setError('Kindly fill required fields!!')
     } else{
       setError("")
+      setLoading(true)
       try {
-        const session = await authService.login({email, password}).then(async(user) => {
-        
-          setSuccess('Success!! you are logged in')
-          setError('')
-       
-            // const usData = {
-            //   email: email,
-            //   password: password
-            // }
-            // await service.createDoc('user' , {email: email,password: password }).then().finally()
-          
-          
-          dispatch (authLogin(user.user))
-          navigate("/")
+        const session = await authService.login({email: email, password: password})
+        .then(async(user) => {
+
+          await service.getUserDocs({uid: user.user.uid})
+        .then((data) =>{ if(data.data().isAdmin === true){
+          dispatch(checkAdmin())
+        }})
+        .catch((e)=> console.log(e))
+
+              setLoading(false)
+              setSuccess('Success!! you are logged in');
+              setError('');
+              dispatch (authLogin(user));
+              navigate("/");
+           
+           
         })
       
       } catch (error) {
-      setSuccess('')
-       setError(error.code)
-      console.log(error);
-      }
-    
+            setSuccess('')
+            setError(error.code)
+            setLoading(false)
+            console.log(error.code);
+           
+          }
     }
   }
+
+  //login with google handler
     const handleGoogleSignIn = async () => {
+      setGoogleLoading(true)
       try {
         const session = await authService.googleSignUp().then((user) => {
           setError('')
@@ -61,9 +72,10 @@ const navigate = useNavigate()
           setSuccess('')
         setError(e.code)
         })
-
+        setGoogleLoading(false)
       } catch (error) {
         setSuccess('')
+        setGoogleLoading(false)
         setError(error.code)
       }
     }
@@ -91,6 +103,8 @@ const navigate = useNavigate()
 
     {/* elements */}
           <ul>
+
+            {/* email input */}
             <li className=' mt-2'>
               <label htmlFor="email" className=' font-bold'>Email:</label>
               <input type="email" id = "email" placeholder='Email'
@@ -98,6 +112,8 @@ const navigate = useNavigate()
               value={email}
               onChange={(e) => setEmail(e.target.value)} />
             </li>
+
+            {/* password input */}
             <li className=' mt-2'>
               <label htmlFor="password" className=' font-bold'>Password:</label>
               <div className="">
@@ -111,15 +127,25 @@ const navigate = useNavigate()
             </li>
           
             <li className=' mt-4'>
-            <button className=' w-full text-white bg-indigo-400 text-lg rounded-md border-[3px] border-indigo-300 hover:bg-indigo-500 hover:border-indigo-400 font-semibold'
+
+              {/* login btn */}
+            <button className=' flex justify-center items-center w-full text-white bg-indigo-400 text-lg rounded-md border-[3px] border-indigo-300 hover:bg-indigo-500 hover:border-indigo-400 font-semibold'
             onClick={handleLogin}
-            >Submit</button>
+            >
+              Login
+              <Loading className={`${loading? 'block': 'hidden'} mx-2`}/>
+              
+              </button>
             </li>
             <li className=' flex flex-col items-center justify-center'>
             <div className=" text-gray-400 text-[15px]"> ------------OR------------</div>
-            <button className=' bg-blue-400 w-full text-lg text-white font-semibold rounded-md border-[3px] border-blue-300 hover'
+
+            {/* google login btn */}
+            <button className=' flex justify-center items-center bg-blue-400 w-full text-lg text-white font-semibold rounded-md border-[3px] border-blue-300 hover'
             onClick={handleGoogleSignIn}
-            >Login With Google</button>
+            >Login With Google
+             <Loading className={`${googleLoading? 'block': 'hidden'} mx-2`}/>
+            </button>
             </li>
           </ul>
         

@@ -10,6 +10,9 @@ import authSlice from '../../store/authSlice'
 function Header() {
   const authStatus = useSelector((state) => state.auth.status)
 
+  const adminStatus = useSelector((state) => state.auth.isAdmin)
+
+
   let [open, setOpen] = useState(false);
 
   const navigate = useNavigate()
@@ -23,7 +26,7 @@ function Header() {
   {
       name: "Admin",
       slug: "/admin-dashboard",
-      active: true //authAdminStatus,
+      active: adminStatus,
   },
   {
     name: "Gallery",
