@@ -1,56 +1,28 @@
 import React, { useEffect, useState } from 'react'
 
 function Alert({
-    children,
-    className='',
-    title,
-    isOpen,
-    ...props
+  children,
+  className='',
+  title,
+  isOpen,
+  ...props
 }) {
 
-  const [open, setOpen] =useState({isOpen})
 
- 
+const [alert, setAlert] = useState(children)
 
- const handleOpen = () => {
- 
-  if(open){
-    setOpen(false)
-  }else{
-    setOpen(true)
-  }
- }
-  return (
-    <div
-    class={` ${isOpen && open? 'block' : 'hidden'} border-b rounded-lg mb-2  text-sm p-4 flex justify-between ${className}`}
-  >
-    <div>
-      <div class="flex items-center">
-       
-        <p>
-          <span class="font-bold">{title}</span>
-          {children}
-        </p>
-      </div>
+
+return (
+  
+      <>
+      <div className={`${children? "block": "hidden"} ${className} flex justify-between  rounded-md border-[2px] mb-2`}>
+    <div className=' mx-auto'>
+    {children !== "" && children}
     </div>
-    <div onClick={handleOpen}>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M6 18L18 6M6 6l12 12"
-        />
-      </svg>
+    <div {...props} className=' flex  self-end mx-4 text-lg cursor-pointer' {...props} >x</div>
     </div>
-  </div>
-  )
+      </>
+)
 }
 
 export default Alert

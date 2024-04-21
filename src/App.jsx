@@ -35,16 +35,18 @@ try {
 
 return !loading? (
   <>
-  
+  <div className=" container min-w-full min-h-full flex flex-col">
     
   <Header/>
-  <div className='min-h-[calc(100vw7400px)]'>
-  
+
+  <div>
   <Outlet />
   </div>
-    {/* <Home/> */}
+    
+    <div className="  flex items-end justify-end">
   <Footer/>
-  
+  </div>
+  </div>
   
   </>
 ) : null

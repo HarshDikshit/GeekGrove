@@ -53,9 +53,9 @@ console.log(userAccount);
     async getCurrentUser(){
         try {
             return await auth.currentUser;
-            // await onAuthStateChanged(auth, (user) => {
-            //      return user
-            // })
+            await onAuthStateChanged(auth, (user) => {
+                 return user
+            })
         } catch (error) {
             throw error;
         }

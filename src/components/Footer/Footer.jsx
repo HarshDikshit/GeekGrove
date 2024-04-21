@@ -18,49 +18,60 @@ function Footer() {
   const [success, setSuccess] = useState("")
   
   const authStatus = useSelector((state) => state.auth.status)
-  const user = useSelector((state) => state.auth.userData)
-  const v= JSON.stringify(user)
-  console.log(user);
-  console.log(v);
 
+
+  const userf = useSelector((state) => state.auth.userData)
+  console.log(userf);
 
 
 
   const handleSubmit = async(e) => {
     e.preventDefault();
+    // check if user is authenticated
     if (authStatus){
+
+      // checl fields if filled
       if(title === "" || description === ""){
         setSuccess('')
         setError('Kindly fill required fields!!')
       } else{
         setLoading(true)
-        authService.getCurrentUser()
-      .then(async(user) => {
+        // get logged in user Credential
+    authService.getCurrentUser()
+  .then(async(user) => {
   
-  const comm = await service.updateComments({uid: user.uid, comments: {title: title,
-  description: description,
-  postedAt: serverTimestamp()}})
+        // add comments
+    const comm = await service.addComments({uid: user.uid, comments: {title: title,
+    description: description,
+    postedAt: serverTimestamp()
+}})
   .then(()=>{
     setError("")
-  setSuccess('Success!! your feedback added successfully')
-  setLoading(false)
+    setSuccess('Success!! your feedback added successfully')
+    setTitle('')
+    setDescription('')
+    setLoading(false)
 }
 ).catch((e)=> {
   setLoading(false)
-  console.log(e.code);
+  setSuccess('')
+  setError(e.code)
 })
 })
-.catch()
-
-      }
-        
-        
+.catch((e)=>
+ {
+   setLoading(false)
+  setSuccess('')
+  setError(e.code)
+}
+)
+      }     
     }else{
       setSuccess('')
       setError('Kindly login first to push feedback')
     }
     
-  }
+}
 return (
     <>
 <div className=' items-end w-full  justify-evenly
@@ -90,23 +101,23 @@ overflow-hidden pt-10 bg-gray-400 border border-t-2 border-t-gray-300'>
     <label htmlFor="description" className=' font-semibold capitalize'> <span className=' text-red-700 font-semibold'>*</span> description:</label>
 
     <textarea name="" id="description" rows="5" className=' text-white w-full my-2 bg-gray-700 rounded-md px-2 py-1 text-md border border-[3px] border-gray-300' placeholder='Enter Description Here...'
+    value={description}
     onChange={(e) => {
       setDescription(e.target.value)
     }}/>
-
-    <div className= {`${error? 'block' : 'hidden'} flex justify-center text-red-700 bg-red-200 rounded-md border-[2px] border-red-300 mb-2`}>
-    {error!== "" && error}
-    {setTimeout(()=> setError('') , 3000)} </div>
-    <div className={`${success? "block": "hidden"} flex justify-center text-green-700 bg-green-200 rounded-md border-[2px] border-green-300 mb-2`}>
-    {success !== "" && success}
-    {setTimeout(()=> setSuccess('') , 3000)}
-    </div>
+  
+  {/* hints and alerts goes here */}
+  {success !=="" && <Alert onClick={()=> setSuccess('')} children={success} className=' bg-green-200 text-green-700 border-green-300'/>}
+  {error !=="" && <Alert onClick={()=> setError('')} children={error} className=' bg-red-200 text-red-700 border-red-300'/>}
+  {/* hints and alert ends here */}
 
     {/* button goes here */}
     <button className=' flex justify-center items-center px-2 py-1 bg-indigo-400 text-white font-semibold text-lg w-full rounded-md border border-[3px] border-indigo-300 hover:bg-indigo-500 hover:border-indigo-400' 
     onClick={handleSubmit}>Submit
     <Loading className={`${loading? 'block': 'hidden'} mx-2`}/>
     </button>
+   {/* button ends here */}
+
   </div>
 </div>
 

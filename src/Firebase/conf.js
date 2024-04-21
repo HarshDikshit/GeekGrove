@@ -1,6 +1,6 @@
 import { deleteObject, ref, uploadBytes } from "firebase/storage";
 import { db, storage } from "../../firebase";
-import {doc, collection, addDoc, documentId, updateDoc, deleteDoc, getDocs, setDoc, getDoc  } from "firebase/firestore";
+import {doc, collection, addDoc, documentId, updateDoc, deleteDoc, getDocs, setDoc, getDoc, query  } from "firebase/firestore";
 import { v4 } from "uuid";
 
 
@@ -8,10 +8,10 @@ import { v4 } from "uuid";
 export class Service{
 
     // add docs 
-    async createUserDoc({uid,name,email,isAdmin, createdAt}){
+    async createUserDoc({uid,name, rollNo, email, createdAt}){
         try {
             const dbref = doc(db, "user", uid)
-            return await setDoc(dbref, {name, email,isAdmin, createdAt});
+            return await setDoc(dbref, {uid, name, email, rollNo, createdAt});
         } catch (error) {
             throw error;
         }
@@ -21,17 +21,39 @@ export class Service{
     async getUserDocs({uid}){
         try {
              const dbref = doc(db,'user', uid)
-            return await getDoc(dbref);
+            return (await getDoc(dbref));
         } catch (error) {
             throw error;
         }
     }
 
-    // uodate
-    async updateDoc ({uid,email, comments, updatedAt}){
+     // check docs
+     async getDocs(){
+        try {
+            const dbref = query(collection(db,'user'))
+            const snapshot= await getDocs(dbref);
+            return snapshot.docs.map((doc=> ({id: doc.id, ...doc.data()})))
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    // update
+    async updateDoc ({uid,name, email, updatedAt}){
         const updateRef = doc(db,'user', uid);
         try {
-            return await updateDoc(updateRef, {email,  comments, updatedAt});
+            return await updateDoc(updateRef, {uid, email, name, updatedAt});
+
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    // update checks
+    async updateChecksDoc ({uid,checks, updatedAt}){
+        const updateRef = doc(db,'user', uid);
+        try {
+            return await setDoc(updateRef, {checks, updatedAt} , {merge: true});
 
         } catch (error) {
             throw error;
@@ -79,7 +101,7 @@ export class Service{
     }
 
     // ------comments--------
-     async updateComments({uid, comments}){
+     async addComments({uid, comments}){
         const commRef = collection(db,'comments');
         
         try {

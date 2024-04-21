@@ -1,9 +1,11 @@
 import React from 'react'
+import { AdUsersCtrl } from '../components'
+
 
 function Admin() {
   return (
     <div className=' min-h-full'>
-      Admin
+    <AdUsersCtrl/>
     </div>
   )
 }
