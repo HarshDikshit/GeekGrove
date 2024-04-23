@@ -45,7 +45,6 @@ const navigate = useNavigate()
               setLoading(false)
               setSuccess('Success!! you are logged in');
               setError('');
-              dispatch (authLogin(user));
               navigate("/");
            
            
@@ -104,7 +103,6 @@ const navigate = useNavigate()
           if(data.data().checks.isAdmin === true){
           dispatch(checkAdmin())
         }
-        dispatch (authLogin(data.data()))
       })
         //other tasks
           setError('')

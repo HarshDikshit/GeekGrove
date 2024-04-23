@@ -15,7 +15,7 @@ function ToggleVerify({uid,
     const [enabled, setEnabled] = useState();
 
     const userData = useSelector((state) => state.auth.userData)
-    console.log(userData);
+    
 
 
     useEffect(()=>{

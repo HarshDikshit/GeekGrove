@@ -2,6 +2,7 @@ import Alert from "./Alert";
 import FileUpload from "./Assets/FileUpload";
 import Toggle from "./Assets/Toggle";
 import ToggleVerify from "./Assets/ToggleVerify";
+import UploadForm from "./Forms/UploadForm";
 import Header from "./Header/Header";
 import LogoutBtn from "./Header/LogoutBtn";
 import ThemeBtn from "./Header/ThemeBtn";
@@ -24,4 +25,5 @@ export {
    Carousal,
    AdUsersCtrl,
    ToggleVerify,
+   UploadForm,
 }

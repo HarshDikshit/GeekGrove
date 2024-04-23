@@ -20,8 +20,8 @@ function Footer() {
   const authStatus = useSelector((state) => state.auth.status)
 
 
-  const userf = useSelector((state) => state.auth.userData)
-  console.log(userf);
+  // const userf = useSelector((state) => state.auth.userData)
+  // console.log(userf);
 
 
 

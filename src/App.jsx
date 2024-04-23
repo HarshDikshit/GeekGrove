@@ -6,6 +6,7 @@ import Home from "./pages/Home"
 import {Outlet} from 'react-router-dom'
 import authService from "./Firebase/auth"
 import {login, logout} from './store/authSlice'
+import service from "./Firebase/conf"
 
 
 function App() {
@@ -16,14 +17,19 @@ let authData = useSelector((state)=> state.auth.userData)
 
 useEffect(() => {
 try {
-  let userData=  authService.getCurrentUser().then((user) => {
-    if (user !== null) {
-      dispatch(login(userData))
-  }else {
-    console.log(userData);
-    dispatch(logout())
-  }
-  setLoading(false)
+  let userData=  authService.getCurrentUser().then(async(user) => {
+    await service.getUserDocs({uid: user.uid})
+    .then((data)=>{
+      if (user !== null) {
+        dispatch(login(Object(data.data())))
+    }else {
+      console.log(userData);
+      dispatch(logout())
+    }
+    setLoading(false)
+    })
+    
+ 
   })
   
   

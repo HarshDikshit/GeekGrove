@@ -15,8 +15,6 @@ function Toggle({uid,
     const [enabled, setEnabled] = useState();
 
     const userData = useSelector((state) => state.auth.userData)
-    console.log(userData);
-
 
     useEffect(()=>{
         const en = authService.getCurrentUser().then(async(user)=> {

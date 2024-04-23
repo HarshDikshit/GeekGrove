@@ -43,7 +43,6 @@ function SignUp() {
               createdAt: serverTimestamp() }).then(()=> {
               setSuccess('Success!! you are logged in');
               setError('');
-              dispatch (authLogin(user));
               navigate("/");
             })
             .catch((e)=>{ setError(e.code)
@@ -110,7 +109,6 @@ function SignUp() {
               if(data.data().checks.isAdmin === true){
                 dispatch(checkAdmin())
               }
-              dispatch(authLogin(data.data()))
             })
            setGoogleLoading(false)
           } catch (error) {
