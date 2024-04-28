@@ -11,8 +11,8 @@ const store = configureStore({
     },
     middleware: (getDefaultMiddleware) =>
     {
-        return getDefaultMiddleware({
-      serializableCheck: {
+      return getDefaultMiddleware({
+       serializableCheck: {
         // Ignore these action types
         ignoredActions: ['your/action/type'],
         // Ignore these field paths in all actions

@@ -2,6 +2,8 @@ import Alert from "./Alert";
 import FileUpload from "./Assets/FileUpload";
 import Toggle from "./Assets/Toggle";
 import ToggleVerify from "./Assets/ToggleVerify";
+import AuthLayout from "./CheckLayouts/AuthLayout";
+import ProfileDialog from "./Forms/ProfileDialog";
 import UploadForm from "./Forms/UploadForm";
 import Header from "./Header/Header";
 import LogoutBtn from "./Header/LogoutBtn";
@@ -26,4 +28,6 @@ export {
    AdUsersCtrl,
    ToggleVerify,
    UploadForm,
+   AuthLayout,
+   ProfileDialog,
 }

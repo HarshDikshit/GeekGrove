@@ -1,13 +1,13 @@
 import { deleteObject, ref, uploadBytes } from "firebase/storage";
 import { db, storage } from "../../firebase";
-import {doc, collection, addDoc, documentId, updateDoc, deleteDoc, getDocs, setDoc, getDoc, query  } from "firebase/firestore";
+import {doc, collection, addDoc, documentId, updateDoc, deleteDoc, getDocs, setDoc, getDoc, query, orderBy  } from "firebase/firestore";
 
 export class PostUploadService{
 
     // set-posts
-    async createPost({createdBy, post, createdAt}){
+    async createPost({folderName, createdBy, post, createdAt}){
         try {
-            const dbref = collection(db, "post")
+            const dbref = collection(db, folderName)
             return await addDoc(dbref, {createdBy,post, createdAt});
         } catch (error) {
             throw error;
@@ -15,9 +15,9 @@ export class PostUploadService{
     }
 
      // check docs
-     async getPostDocs(){
+     async getSlidesDocs(){
         try {
-            const dbref = query(collection(db,'post'))
+            const dbref = query(collection(db,'slide'), orderBy("createdAt", "desc"))
             const snapshot= await getDocs(dbref);
             return snapshot.docs.map((doc=> ({id: doc.id, ...doc.data()})))
         } catch (error) {
@@ -25,6 +25,13 @@ export class PostUploadService{
         }
     }
 
+    async deleteSlidesDoc({id}){
+        try { 
+            return await deleteDoc(doc(db, "slide", id ));
+        } catch (error) {
+            throw error;
+        }
+    }
 
 }
 

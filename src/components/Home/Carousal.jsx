@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import {FaChevronLeft, FaChevronRight} from "react-icons/fa"
 
+import postUploadService from '../../Firebase/post'
+
+
 function Carousal({ children: slides,
                 autoSlide = false,
-                autoSlideInterval= 5000
+                autoSlideInterval= 3000
 } ) {
     const [current, setCurrent] = useState(0)
 
@@ -14,13 +17,17 @@ function Carousal({ children: slides,
     useEffect(()=>{
         if(!autoSlide) return
         const slideInterval = setInterval(next, autoSlideInterval)
+        
         return ()=> clearInterval(slideInterval)
-    },[])
+            
+    },[slides.length, current])
   return (
     <>
     <div className=' overflow-hidden relative z-[0] '>
         <div className=" flex min-w-full object-cover aspect-[16/9] transition-transform ease-out duration-500" style={{transform: `translateX(-${current * 100}%)`}}>{slides}</div>
    
+        
+
     <div className=' absolute inset-0 flex items-center justify-between p-4'>
     <button onClick={prev} className=' w-[30px]  h-[30px] items-center justify-center p-1 rounded-full shadow bg-white opacity-[70%]'>
             <FaChevronLeft className=' m-auto'/>

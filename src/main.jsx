@@ -10,6 +10,7 @@ import Admin from './pages/Admin.jsx'
 import Gallery from './pages/Gallery.jsx'
 import {Provider} from 'react-redux'
 import store from './store/store.js'
+import { AuthLayout } from './components/index.js'
 
 const router = createBrowserRouter([
   {
@@ -38,11 +39,21 @@ const router = createBrowserRouter([
       },
       {
         path: "/admin-dashboard",
-        element: <Admin/>,
+
+        element: (
+        <AuthLayout authentication>
+        <Admin/>
+        </AuthLayout>
+        ),
     },
     {
       path: "/gallery",
-      element: <Gallery />,
+      
+      element: (
+        <AuthLayout authentication>
+        <Gallery />
+        </AuthLayout>
+        ),
   },
 
     ],

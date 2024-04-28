@@ -1,18 +1,15 @@
-  import React from 'react'
+  import React, { useEffect, useState } from 'react'
   import service from '../Firebase/conf'
   import authService from '../Firebase/auth'
 import { Alert, Carousal, Toggle } from '../components'
 import { useSelector, useDispatch } from 'react-redux'
-  
-  
-
+import postUploadService from '../Firebase/post'
+import {FaTrash} from 'react-icons/fa6'
  
-
   function Home() {
 
     const authStatus = useSelector((state)=> state.auth.status)
     const userf = useSelector((state) => state.auth.userData)
-    
 
     const find = async()=>{
       authStatus?  ( await authService.getCurrentUser()
@@ -24,24 +21,38 @@ import { useSelector, useDispatch } from 'react-redux'
       .catch((e)=> {console.log(e.code);})) : null
     }
 
-    const slides = [
-      "https://images.freeimages.com/images/large-previews/e7e/lisbon-bridge-1235926.jpg?fmt=webp&w=500",
+    // slides mechanism
+    const [slides,setSlides] = useState([])
+  const [loading, setLoading] = useState(true)
+  
 
-      "https://i.ibb.co/ncrXc2V/1.png",
-      "https://i.ibb.co/B3s7v4h/2.png",
-      "https://i.ibb.co/XXR8kzF/3.png",
-      "https://images.freeimages.com/images/large-previews/155/bridge-1559052.jpg?fmt=webp&h=350",
-    ]
+  const userArr = async ()=>{
+    try {
+      const fetchData = await postUploadService.getSlidesDocs();
+      setLoading(false)
+      setSlides(fetchData);
+    } catch (error) {
+      console.log(error.code);
+    } 
+  }
+ 
+
+useEffect( ()=> {
+  userArr();
+},[])
     
 
   return (
   <>
   <div className=" m-auto">
-    <Carousal autoSlide={true}>
+    <Carousal children={slides} autoSlide={true}>
       {slides.map((s)=> (
-        <img className=' min-w-full' src={s}/>
+        <div className='min-w-full'>
+        <img className=' min-w-full' src={s.post.file}/>
+        </div>
       ))
       }
+      
     </Carousal>
     
     </div>

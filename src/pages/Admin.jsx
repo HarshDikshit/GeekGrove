@@ -13,7 +13,7 @@ function Admin() {
   const userf = useSelector((state) => state.auth.userData)
   
   return (
-    <div className=' min-h-full'>
+    <div className=' z-[3] min-h-full'>
       {/* nav-admin */}
        <div className=' flex items-center justify-end py-1 px-5 w-full bg-gray-400 text-white' > 
       {/* add-btn */}

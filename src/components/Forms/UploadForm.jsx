@@ -8,8 +8,9 @@ import service from '../../Firebase/conf'
 import Alert from '../Alert'
 import { data } from 'autoprefixer'
 import { v4 } from 'uuid'
-import { uploadBytesResumable, ref } from 'firebase/storage'
+import { uploadBytesResumable, ref, getDownloadURL } from 'firebase/storage'
 import { storage } from '../../../firebase'
+import {CircleIndicator} from 'react-indicators'
 
 function UploadForm({className="", click, currentUser=""}) {
     const [title, setTitle] = useState("")
@@ -22,22 +23,65 @@ function UploadForm({className="", click, currentUser=""}) {
     const [success, setSuccess] = useState("")
     const [width, setWidth] = useState(0)
 
+    const timeElapsed = Date.now();
+    const today = new Date(timeElapsed);
+
     const userf = useSelector((state) => state.auth.userData)
 
     const handleSubmit = async()=>{
+      setSuccess("")
+      setError("")
+
+      // check for fields
       if(title === "" || token === "" || token === "select"){
         setError("fill required files")
 
       }else{
+        // if file selected
         if(file !== ""){
           setLoading(true)
           const filename =v4()
-          await service.uploadFile({Ref: `post/${token}/${filename}`, file: file})
-          .then(async()=>{
-            await service.getPreview({Ref:  `post/${token}/${filename}`})
-            .then(async(url)=> {
-              
-              await postUploadService.createPost({createdBy: Object(currentUser), post: {title: title, description: description, token: token, file: url}, createdAt: serverTimestamp()})
+
+          // upload task
+          const storageRef = ref(storage, `post/${token}/${filename}`);
+          const uploadTask = uploadBytesResumable(storageRef, file);
+
+
+uploadTask.on('state_changed',
+  (snapshot) => {
+    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+    let progress = Math.floor(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+    setWidth(progress)
+    
+    console.log('Upload is ' + progress + '% done');
+    switch (snapshot.state) {
+      case 'paused':
+        console.log('Upload is paused');
+        break;
+      case 'running':
+        console.log('Upload is running');
+        break;
+    }
+  }, 
+  (error) => {
+    
+    switch (error.code) {
+      case 'storage/unauthorized':
+        // User doesn't have permission to access the object
+        break;
+      case 'storage/canceled':
+        // User canceled the upload
+        break;
+      case 'storage/unknown':
+        // Unknown error occurred, inspect error.serverResponse
+        break;
+    }
+  }, 
+  () => {
+    // Upload completed successfully, now we can get the download URL
+    getDownloadURL(uploadTask.snapshot.ref).then(async(downloadURL) => {
+      console.log('File available at', downloadURL);
+      await postUploadService.createPost({folderName: token,createdBy: currentUser, post: {title: title, description: description, token: token, file: downloadURL}, createdAt: today.toISOString() })
               .then(()=>
             {
               setSuccess('uploaded success')
@@ -50,21 +94,27 @@ function UploadForm({className="", click, currentUser=""}) {
               setError(e.code)
               setSuccess("")
             })
+    });
+  }
+);
+        }else{
+          if(link === ''){
+            setError('Enter file url !!')
+            return
+          }
+          await postUploadService.createPost({folderName: token,createdBy: currentUser, post: {title: title, description: description, token: token, file: link}, createdAt: today.toISOString() })
+              .then(()=>
+            {
+              setSuccess('uploaded success')
+              setError("")
+              setLoading(false)
             })
             .catch((e)=> {
               setLoading(false)
-              console.log(e.code);
+              console.log(e);
               setError(e.code)
               setSuccess("")
             })
-            
-          })
-          .catch((e)=> {
-            setLoading(false)
-            console.log(e.code);
-            setError(e.code)
-            setSuccess("")
-          })
         }
       }
     }
@@ -72,9 +122,10 @@ function UploadForm({className="", click, currentUser=""}) {
    return (
     <>
 
-      <div id='outer-wrapper'  className={`${className} z-[4] absolute h-screen w-full bg-black bg-opacity-60  backdrop-blur-sm`}>
-      <div className=' absolute w-full'>
-        <div id='inner-wrapper' className="  flex flex-col justify-center items-center m-auto md:w-[50%] w-[80%] top-[50%] left-[50%] bg-slate-300 rounded-md shadow-sm shadow-black p-2">
+      <div id='outer-wrapper'  className={`${className} h-full w-full absolute z-[4] bg-black bg-opacity-60  backdrop-blur-sm`}>
+      <div className='  w-full  flex flex-col  items-center'>
+      <div onClick={click} className='z-[3] w-full h-screen absolute'></div>
+        <div id='inner-wrapper' className="z-[4] flex flex-col justify-center items-center  md:w-[50%] w-[80%]  bg-slate-300 rounded-md shadow-sm shadow-black p-2">
             {/* items */}
             <div className=" w-[80%] flex flex-col justify-center my-8">
 
@@ -147,9 +198,11 @@ function UploadForm({className="", click, currentUser=""}) {
                 setLink(e.target.value)
                 }} />
                     </div>
+                 
+                    </div>
 
                     {/* sub-btn */}
-                    <button className=' flex justify-center items-center px-2 py-1 bg-indigo-400 text-white font-semibold text-lg w-full rounded-md border border-[3px] border-indigo-300 hover:bg-indigo-500 hover:border-indigo-400' 
+                    <button  className=' flex justify-center items-center px-2 py-1 bg-indigo-400 text-white font-semibold text-lg w-full rounded-md border border-[3px] border-indigo-300 hover:bg-indigo-500 hover:border-indigo-400' 
                     onClick={handleSubmit}>Submit
                     <Loading className={`${loading? 'block': 'hidden'} mx-2`}/>
                     </button>
@@ -157,7 +210,7 @@ function UploadForm({className="", click, currentUser=""}) {
             </div>
         </div>
         </div>
-      </div>
+      
     </>
   )
 }

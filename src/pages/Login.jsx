@@ -34,28 +34,23 @@ const navigate = useNavigate()
       try {
         const session = await authService.login({email: email, password: password})
         .then(async(user) => {
-
-          await service.getUserDocs({uid: user.user.uid})
-        .then((data) =>{
-          if(data.data().checks.isAdmin === true){
-          dispatch(checkAdmin())
-        }})
-        .catch((e)=> console.log(e))
-
               setLoading(false)
               setSuccess('Success!! you are logged in');
               setError('');
               navigate("/");
-           
-           
+
+              await service.getUserDocs({uid: user.user.uid})
+        .then((data) =>{
+          dispatch(authLogin(Object(data.data())))
+          if(data.data().checks.isAdmin === true){
+          dispatch(checkAdmin())
+        } 
+      })
         })
-      
       } catch (error) {
             setSuccess('')
             setError(error.code)
             setLoading(false)
-            console.log(error.code);
-           
           }
     }
   }
@@ -66,26 +61,10 @@ const navigate = useNavigate()
       try {
         const session = await authService.googleSignUp().then(async(user) => {
           //check field is present
-          const check = await service.getUserDocs({uid: user.user.uid})
-            if(check._document === null){
-              const userDoc =  await service.createUserDoc({
-                uid: user.user.uid,
-                name: user.user.displayName,
-                rollNo: rollNo,
-                email: user.user.email,
-                createdAt: serverTimestamp() }).then(()=> {
-                setSuccess('Success!! you are logged in');
-                setError('');
-                navigate("/");
-              })
-              .catch((e)=>{ setError(e.code)
-              console.log(e.code);
-              })
-            }else{
               const userDoc =  await service.updateDoc({
                 uid: user.user.uid,
+                avatar: user.user.photoURL,
                 name: user.user.displayName,
-                
                 email: user.user.email,
                 updatedAt: serverTimestamp() }).then(()=> {
                 setSuccess('Success!! you are logged in');
@@ -95,11 +74,11 @@ const navigate = useNavigate()
               .catch((e)=>{ setError(e.code)
               console.log(e.code);
               })
-            }
-         
+
           //check for admin
           await service.getUserDocs({uid: user.user.uid})
         .then((data) =>{
+          dispatch(authLogin(data.data()))
           if(data.data().checks.isAdmin === true){
           dispatch(checkAdmin())
         }

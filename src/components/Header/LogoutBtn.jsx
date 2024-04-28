@@ -4,7 +4,7 @@ import { logout as authLogout, disableAdmin } from '../../store/authSlice'
 import authService from '../../Firebase/auth'
  
 
-function LogoutBtn() {
+function LogoutBtn({className=''}) {
     const dispatch = useDispatch()
     const logoutHandler = async() => {
       try {
@@ -20,7 +20,7 @@ function LogoutBtn() {
 
   return (
     <button
-    className='inline-bock px-6 py-2 duration-200 hover:bg-blue-100 rounded-full'
+    className={`${className} inline-bock duration-200 `}
     onClick={logoutHandler}
     >Logout</button>
   )

@@ -3,7 +3,8 @@ import {createUserWithEmailAndPassword,
     signOut,
     GoogleAuthProvider,
     onAuthStateChanged,
-    signInWithPopup} from "firebase/auth";
+    signInWithPopup,
+} from "firebase/auth";
 
 import {auth} from "../../firebase"
 
@@ -15,8 +16,6 @@ export class AuthService {
     async createAccount( {email, password} ) {
         try {
      const userAccount =  await  createUserWithEmailAndPassword(auth, email, password)
-
-console.log(userAccount);
         if (userAccount) {
             return this.login({ email, password });
         } else {
@@ -37,6 +36,17 @@ console.log(userAccount);
         );
         } catch (error) {
         throw error;
+        }
+    }
+
+    // auth-state-changed
+    async authStateChanged(){
+        try {
+            return await onAuthStateChanged(auth, (user)=>{
+                return user
+            })
+        } catch (error) {
+            throw error
         }
     }
 

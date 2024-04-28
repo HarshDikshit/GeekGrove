@@ -11,10 +11,10 @@
     export class Service{
 
         // add docs 
-        async createUserDoc({uid,name, rollNo, email, createdAt}){
+        async createUserDoc({uid,name,avatar, rollNo, email, createdAt}){
             try {
                 const dbref = doc(db, "user", uid)
-                return await setDoc(dbref, {uid, name, email, rollNo, createdAt});
+                return await setDoc(dbref, {uid, name, avatar, email, rollNo, createdAt}, {merge:true});
             } catch (error) {
                 throw error;
             }
@@ -42,16 +42,25 @@
         }
 
         // update
-        async updateDoc ({uid,name, email, updatedAt}){
+        async updateDoc ({uid,avatar, name, email, updatedAt}){
             const updateRef = doc(db,'user', uid);
             try {
-                return await updateDoc(updateRef, {uid, email, name, updatedAt});
+                return await setDoc(updateRef, {uid, avatar, email, name, updatedAt}, {merge: true});
 
             } catch (error) {
                 throw error;
             }
         }
 
+        async updateProfile ({uid,avatar, name, rollNo, email, updatedAt}){
+            const updateRef = doc(db,'user', uid);
+            try {
+                return await setDoc(updateRef, {uid, avatar, rollNo, email, name, updatedAt}, {merge: true});
+
+            } catch (error) {
+                throw error;
+            }
+        }
         // update checks
         async updateChecksDoc ({uid,checks, updatedAt}){
             const updateRef = doc(db,'user', uid);

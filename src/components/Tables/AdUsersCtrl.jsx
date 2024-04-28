@@ -58,7 +58,7 @@ useEffect( ()=> {
         <div className="w-8 h-8 m-auto "><FaUserCircle className=' w-full h-full text-gray-400'/></div>
         </div>
         </td> */}
-
+      
       <td>
          {/* name */}
          <div>
@@ -79,13 +79,13 @@ useEffect( ()=> {
       </td>
       <td>
          {/* admin-ctrl-btn */}
-         <div>
+         <div >
         <Toggle uid={data.uid} />
         </div>
       </td>
       <td>
          {/* verify-ctrl-btn */}
-         <div>
+         <div >
         <ToggleVerify uid={data.uid} />
         </div>
       </td>
