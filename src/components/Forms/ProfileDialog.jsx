@@ -137,7 +137,7 @@ getDownloadURL(uploadTask.snapshot.ref).then(async(downloadURL) => {
                 { img.url===null?
                 (<FaUserCircle    className="ml-2  text-gray-600 mr-2 inline-block relative object-cover object-center !rounded-full  w-[40px] h-[40px] border-2 border-gray-400 p-0.5"
                 />)
-                :
+                : 
                   (<div className='flex justify-end items-end'>
                 <img
                 src={img.url}
