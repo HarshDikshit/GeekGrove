@@ -14,6 +14,16 @@ export class PostUploadService{
         }
     }
 
+    //update-slide
+    async updateSlidePost({folderName, uodatedBy, post, updateAt}){
+        try {
+            const dbref = collection(db, folderName)
+            return await addDoc(dbref, {createdBy,post, createdAt});
+        } catch (error) {
+            throw error;
+        }
+    }
+
      // check docs
     async getSlidesDocs(){
         try {

@@ -3,37 +3,40 @@ import { FaTrashCan } from 'react-icons/fa6'
 import service from '../../Firebase/conf';
 import { FaCheckCircle, FaExclamation, FaExclamationCircle } from 'react-icons/fa';
 import postUploadService from '../../Firebase/post';
+import Loading from '../Loading';
 
 function DeleteDialog({className="", click, data}) {
-
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
+  const [loading, setLoading] = useState(false)
 
     const handleDelete =async()=>{
-        setSuccess("")
-        setError("")
+        setLoading(true)
 
       try {
         if(data.post.fileName && data.post.fileName !=="" ){
+          setSuccess("")
+          setError("")
           await service.deleteFile({Ref: data.post.fileName})
           .then(async()=>{
-            await postUploadService.deleteSlidesDoc({token: "study", id: data.id})
+            await postUploadService.deleteSlidesDoc({token: data.post.token, id: data.id})
             .then(()=>{
               setSuccess("Deleted successfully")
+              setTimeout(()=>{click()},2000)
             })
           })
         }else{
-          await postUploadService.deleteSlidesDoc({token: "study", id: data.id})
+          await postUploadService.deleteSlidesDoc({token: data.post.token, id: data.id})
           .then(()=>{
             setSuccess("Deleted successfully")
+            setTimeout(()=>{click()},2000)
           })
         }
-        setError("")
-        setSuccess("")
-         setTimeout(()=>{click()},2000)
+        setLoading(false)
       } catch (error) {
         setSuccess("")
         setError(error.code)
+        setLoading(false)
       }
     }
     return (
@@ -63,7 +66,9 @@ function DeleteDialog({className="", click, data}) {
                   <button onClick={click} className=' flex bg-gray-700 justify-center items-center text-white rounded-md border-[2px] border-gray-400 font-bold p-2 mx-2'>Cancel</button>
 
                      {/* cancel btn */}
-                  <button onClick={handleDelete} className=' flex bg-red-700 justify-center items-center text-white rounded-md border-[2px] border-red-400 font-bold p-2 mx-2'>  Delete <FaTrashCan className=' ml-2 text-white'/></button>
+                  <button onClick={handleDelete} className=' flex bg-red-700 justify-center items-center text-white rounded-md border-[2px] border-red-400 font-bold p-2 mx-2'>  Delete <FaTrashCan className=' ml-2 text-white'/>
+                  <Loading className={`${loading? 'block': 'hidden'} mx-2`}/>
+                  </button>
                   </div>
 
                  

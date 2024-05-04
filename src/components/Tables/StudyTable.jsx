@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Toggle from '../Assets/Toggle'
-import service from '../../Firebase/conf'
-import ToggleVerify from '../Assets/ToggleVerify'
 import Loading from '../Loading'
 import postUploadService from '../../Firebase/post'
 import { Link } from 'react-router-dom'
@@ -53,7 +50,7 @@ function StudyTable() {
         <h2 className=' grow flex justify-center my-2 font-bold'>Study Material</h2>
 
         {/* create btn */}
-        {adminStatus=== true && ( <div onClick={()=>{setFormStatus(!formStatus)}} className='  flex justify-center items-center text-white font-semibold bg-blue-500 p-2 rounded-md'>
+        {adminStatus=== true && ( <div onClick={()=>{setFormStatus(!formStatus)}} className=' cursor-pointer  flex justify-center items-center text-white font-semibold bg-blue-500 p-2 rounded-md'>
             Create <FaPlusCircle className=' ml-2 text-white'/>
         </div>)}
        
@@ -99,7 +96,7 @@ function StudyTable() {
         <td>
             {/* view btn */}
             <div>
-            <div className=' text-gray-600 font-semibold mx-2 flex justify-center items-center '>
+            <div className=' cursor-pointer text-gray-600 font-semibold mx-2 flex justify-center items-center '>
                 <Link to={data.post.file} download><FaDownload className=' text-blue-700'/></Link>
                 </div>
             </div>
@@ -109,7 +106,7 @@ function StudyTable() {
         {adminStatus === true && (
         <td>
             <div onClick={handleEdit}>
-            <div className=' text-gray-600 font-semibold mx-2 flex justify-center items-center '>
+            <div className=' cursor-pointer text-gray-600 font-semibold mx-2 flex justify-center items-center '>
                 <FaPenToSquare className=' text-green-700'/>
                 </div>
             </div>
@@ -120,7 +117,7 @@ function StudyTable() {
         {adminStatus === true && (
         <td>
             <div onClick={()=> setDeleteDialog({status: !deleteDialog.status, data: data})}>
-            <div className=' text-gray-600 font-semibold mx-2 flex justify-center items-center '>
+            <div className=' cursor-pointer text-gray-600 font-semibold mx-2 flex justify-center items-center '>
                 <FaTrashCan className=' text-red-700'/>
                 </div>
             </div>

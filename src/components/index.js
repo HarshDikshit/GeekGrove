@@ -3,6 +3,7 @@ import FileUpload from "./Assets/FileUpload";
 import Toggle from "./Assets/Toggle";
 import ToggleVerify from "./Assets/ToggleVerify";
 import AuthLayout from "./CheckLayouts/AuthLayout";
+import AddDialog from "./Dialogs/AddDialog";
 import DeleteDialog from "./Dialogs/DeleteDialog";
 import ProfileDialog from "./Forms/ProfileDialog";
 import UploadForm from "./Forms/UploadForm";
@@ -14,6 +15,7 @@ import Loading from "./Loading";
 import SearchAdmin from "./Search/SearchAdmin";
 import AdUsersCtrl from "./Tables/AdUsersCtrl";
 import StudyTable from "./Tables/StudyTable";
+
 
 
 export {
@@ -33,4 +35,5 @@ export {
     SearchAdmin,
     StudyTable,
     DeleteDialog,
+    AddDialog,
 }

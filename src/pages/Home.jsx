@@ -1,12 +1,28 @@
   import React, { useEffect, useState } from 'react'
   import service from '../Firebase/conf'
   import authService from '../Firebase/auth'
-import { Alert, Carousal, StudyTable, Toggle } from '../components'
+import { Alert, Carousal,AddDialog, DeleteDialog, StudyTable, Toggle } from '../components'
 import { useSelector, useDispatch } from 'react-redux'
 import postUploadService from '../Firebase/post'
-import {FaTrash} from 'react-icons/fa6'
+import {FaTrash, FaTrashCan} from 'react-icons/fa6'
+import { FaPlusCircle } from 'react-icons/fa'
  
   function Home() {
+    const [create, setCreate] = useState({
+      status: false,
+      data: null
+  })
+
+  const [deleteDialog, setDeleteDialog] = useState({
+    status: false,
+    data: null
+})
+
+const [addDialog, setAddDialog] = useState({
+  status: false,
+  data: null
+})
+const adminStatus = useSelector((state)=>state.auth.isAdmin)
 
     const authStatus = useSelector((state)=> state.auth.status)
     const userf = useSelector((state) => state.auth.userData)
@@ -44,18 +60,35 @@ useEffect( ()=> {
 
   return (
   <>
-  <div className=" m-auto">
-    <Carousal children={slides} autoSlide={true}>
+  <div  className=" m-auto">
+    <Carousal  autoSlide={true}>
+      {/* img mapping */}
       {slides.map((s)=> (
-        <div className='min-w-full'>
-        <img className=' min-w-full' src={s.post.file}/>
+        <div className=' min-w-full'>
+          {/* create window */}
+          {adminStatus===true && (
+        <div className='absolute flex items-start justify-end p-4'>
+        <div className='p-2  bg-opacity-[40%] gap-2 flex bg-black rounded-lg'>
+        <FaPlusCircle  onClick={()=> setAddDialog({status: !addDialog.status, data: s})}  className=' text-xl cursor-pointer text-white'/>
+        <FaTrashCan onClick={()=> setDeleteDialog({status: !deleteDialog.status, data: s})}  className=' text-xl cursor-pointer text-white'/>
+        </div>
+        </div>
+        )}
+
+        {/* img */}
+        <img className=' cursor-pointer min-w-full' src={s.post.file}/>
         </div>
       ))
       }
       
     </Carousal>
+
+   
     
     </div>
+
+    <DeleteDialog data={deleteDialog.data}  click={()=>setDeleteDialog(!deleteDialog.status)} className={` ${deleteDialog.status? 'block': 'hidden'}`}  />
+    <AddDialog currentUser={userf} data={addDialog.data}  click={()=>setAddDialog(!addDialog.status)} className={` ${addDialog.status? 'block': 'hidden'}`}  />
 
 <div>
   <StudyTable/>
