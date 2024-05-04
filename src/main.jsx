@@ -19,7 +19,11 @@ const router = createBrowserRouter([
     children: [
         {
             path: "/",
-            element: <Home />,
+            element: (
+              
+              <Home/>
+              
+              ),
         },
         {
             path: "/login",
@@ -33,15 +37,11 @@ const router = createBrowserRouter([
               <SignUp/>
             ),
         },
-        {
-          path: "/feedback",
-          element: <Home />,
-      },
       {
         path: "/admin-dashboard",
 
         element: (
-        <AuthLayout authentication>
+        <AuthLayout route='/admin-dashboard'>
         <Admin/>
         </AuthLayout>
         ),
@@ -50,7 +50,7 @@ const router = createBrowserRouter([
       path: "/gallery",
       
       element: (
-        <AuthLayout authentication>
+        <AuthLayout route='/gallery'>
         <Gallery />
         </AuthLayout>
         ),

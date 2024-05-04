@@ -177,9 +177,9 @@
         accept="image/*"
         onChange={(event) => {
           if (event.target.files && event.target.files[0]) {
-            if (event.target.files[0].size > 1 * 1000 * 1024) {
-            setError("File with maximum size of 1MB is allowed")
-              console.log("File with maximum size of 1MB is allowed");
+            if (event.target.files[0].size > 0.3 * 1000 * 1024) {
+            setError("File with maximum size of 300KB is allowed")
+              
               return false;
             }
               setError('')

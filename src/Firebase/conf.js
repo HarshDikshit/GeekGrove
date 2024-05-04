@@ -1,6 +1,6 @@
     import { deleteObject, ref, uploadBytes, getDownloadURL, uploadBytesResumable } from "firebase/storage";
     import { db, storage } from "../../firebase";
-    import {doc, collection, addDoc, documentId, updateDoc, deleteDoc, getDocs, setDoc, getDoc, query  } from "firebase/firestore";
+    import {doc, collection, addDoc, documentId, updateDoc, deleteDoc, getDocs, setDoc, getDoc, query, orderBy, where, or  } from "firebase/firestore";
     import { v4 } from "uuid";
     import postUploadService from "./post";
     import { useSelector } from "react-redux";
@@ -33,7 +33,7 @@
         // check docs
         async getDocs(){
             try {
-                const dbref = query(collection(db,'user'))
+                const dbref = query(collection(db,'user'), orderBy("name"))
                 const snapshot= await getDocs(dbref);
                 return snapshot.docs.map((doc=> ({id: doc.id, ...doc.data()})))
             } catch (error) {

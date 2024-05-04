@@ -15,7 +15,7 @@ export class PostUploadService{
     }
 
      // check docs
-     async getSlidesDocs(){
+    async getSlidesDocs(){
         try {
             const dbref = query(collection(db,'slide'), orderBy("createdAt", "desc"))
             const snapshot= await getDocs(dbref);
@@ -25,9 +25,21 @@ export class PostUploadService{
         }
     }
 
-    async deleteSlidesDoc({id}){
+    // study-docs
+    async getStudyDocs(){
+        try {
+            const dbref = query(collection(db,'study'), orderBy("createdAt", "desc"))
+            const snapshot= await getDocs(dbref);
+            return snapshot.docs.map((doc=> ({id: doc.id, ...doc.data()})))
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
+    async deleteSlidesDoc({token, id}){
         try { 
-            return await deleteDoc(doc(db, "slide", id ));
+            return await deleteDoc(doc(db, token, id ));
         } catch (error) {
             throw error;
         }

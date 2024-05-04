@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import Loading from '../Loading'
 import {FaXmark} from 'react-icons/fa6'
 import postUploadService from '../../Firebase/post'
@@ -23,12 +23,15 @@ function UploadForm({className="", click, currentUser=""}) {
     const [success, setSuccess] = useState("")
     const [width, setWidth] = useState(0)
 
+    const imageInputRef = useRef()
+
     const timeElapsed = Date.now();
     const today = new Date(timeElapsed);
 
     const userf = useSelector((state) => state.auth.userData)
 
     const handleSubmit = async()=>{
+
       setSuccess("")
       setError("")
 
@@ -40,20 +43,17 @@ function UploadForm({className="", click, currentUser=""}) {
         // if file selected
         if(file !== ""){
           setLoading(true)
-          const filename =v4()
+          const filename =`post/${token}/${v4()}`
 
           // upload task
-          const storageRef = ref(storage, `post/${token}/${filename}`);
+          const storageRef = ref(storage, `${filename}`);
           const uploadTask = uploadBytesResumable(storageRef, file);
-
 
 uploadTask.on('state_changed',
   (snapshot) => {
     // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
     let progress = Math.floor(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
     setWidth(progress)
-    
-    console.log('Upload is ' + progress + '% done');
     switch (snapshot.state) {
       case 'paused':
         console.log('Upload is paused');
@@ -80,13 +80,13 @@ uploadTask.on('state_changed',
   () => {
     // Upload completed successfully, now we can get the download URL
     getDownloadURL(uploadTask.snapshot.ref).then(async(downloadURL) => {
-      console.log('File available at', downloadURL);
-      await postUploadService.createPost({folderName: token,createdBy: currentUser, post: {title: title, description: description, token: token, file: downloadURL}, createdAt: today.toISOString() })
+      await postUploadService.createPost({folderName: token,createdBy: currentUser, post: {title: title, description: description, token: token, file: downloadURL, fileName: filename}, createdAt: today.toISOString() })
               .then(()=>
             {
               setSuccess('uploaded success')
               setError("")
               setLoading(false)
+              setFile("")
             })
             .catch((e)=> {
               setLoading(false)
@@ -98,10 +98,6 @@ uploadTask.on('state_changed',
   }
 );
         }else{
-          if(link === ''){
-            setError('Enter file url !!')
-            return
-          }
           await postUploadService.createPost({folderName: token,createdBy: currentUser, post: {title: title, description: description, token: token, file: link}, createdAt: today.toISOString() })
               .then(()=>
             {
@@ -116,15 +112,17 @@ uploadTask.on('state_changed',
               setSuccess("")
             })
         }
+        setFile("")
+        setTimeout(()=>{click()},2000)
       }
     }
 
    return (
     <>
 
-      <div id='outer-wrapper'  className={`${className} h-full w-full absolute z-[4] bg-black bg-opacity-60  backdrop-blur-sm`}>
-      <div className='  w-full  flex flex-col  items-center'>
-      <div onClick={click} className='z-[3] w-full h-screen absolute'></div>
+      <div id='outer-wrapper'  className={`${className} top-0 left-0 h-screen w-screen fixed z-[5] bg-black bg-opacity-60  backdrop-blur-sm`}>
+      <div className='  w-full h-full  flex flex-col  items-center justify-center'>
+      <div onClick={click} className='z-[3] w-screen h-screen absolute'></div>
         <div id='inner-wrapper' className="z-[4] flex flex-col justify-center items-center  md:w-[50%] w-[80%]  bg-slate-300 rounded-md shadow-sm shadow-black p-2">
             {/* items */}
             <div className=" w-[80%] flex flex-col justify-center my-8">
@@ -182,6 +180,8 @@ uploadTask.on('state_changed',
                     <div>
                     <label htmlFor="file" className=' font-semibold'>File</label>
                     <input type="file" id = "file"
+                    placeholder='optional'
+                    ref={imageInputRef}
                     className='text-white w-full my-2 bg-gray-700 rounded-md px-2 py-1 text-md border border-[3px] border-gray-300'
                     onChange={(e) => {
                       setFile(e.target.files[0])
@@ -192,7 +192,7 @@ uploadTask.on('state_changed',
                     {/* link */}
                     <div>
                     <label htmlFor="link" className=' font-semibold'>Link</label>
-              <input type="text" id = "link" placeholder='Link' value={link}
+              <input type="text" id = "link" placeholder='Link (optional)' value={link}
               className='text-white w-full my-2 bg-gray-700 rounded-md px-2 py-1 text-md border border-[3px] border-gray-300'
               onChange={(e) => {
                 setLink(e.target.value)

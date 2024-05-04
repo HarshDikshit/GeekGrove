@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {FaXmark} from 'react-icons/fa6'
+import {FaCircleExclamation, FaXmark} from 'react-icons/fa6'
 import Alert from '../Alert'
 import Loading from '../Loading'
 import {FaCircleCheck} from "react-icons/fa6"
@@ -17,7 +17,7 @@ import { FaUserCircle } from 'react-icons/fa'
 
 
 function ProfileDialog({className="", click, currentUser=""}) {
-  console.log(currentUser);
+  
     const [isTodoEditable, setIsTodoEditable] = useState(false)
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
@@ -26,7 +26,6 @@ function ProfileDialog({className="", click, currentUser=""}) {
     const [success, setSuccess] = useState("")
     const [loading, setLoading] = useState(false)
     const [img, setImg] = useState({file:null,url: ""})
-    const [open, setOpen] = useState(true)
 
     const dispatch = useDispatch();
 
@@ -107,7 +106,7 @@ getDownloadURL(uploadTask.snapshot.ref).then(async(downloadURL) => {
                 <div id='outer-wrapper'  className={`${className} top-0 left-0 flex justify-center fixed h-full w-full  z-[1] bg-black bg-opacity-60  backdrop-blur-sm  `}>
                 <div className='  w-full  flex flex-col items-center justify-center'>
                 <div onClick={click} className='z-[3] w-full h-screen absolute'></div>
-                <div id='inner-wrapper' className="  mt-12 z-[5] flex flex-col justify-center items-center  md:w-[20%] w-[50%]  bg-slate-300 rounded-md shadow-sm shadow-black p-2">
+                <div id='inner-wrapper' className="  mt-12 z-[5] flex flex-col justify-center items-center  md:w-[40%] w-[80%]  bg-slate-300 rounded-md shadow-sm shadow-black p-2">
                 {/* items */}
                 <div className=" w-[80%] flex flex-col justify-center my-8">
 
@@ -128,7 +127,7 @@ getDownloadURL(uploadTask.snapshot.ref).then(async(downloadURL) => {
                 {/* hints and alert ends here */}
 
                 {/* intro */}
-                <div className=' my-2 justify-center  flex flex-col w-full h-full'>
+                <div className='flex-wrap my-2 justify-center  flex flex-col w-full h-full'>
 
                   {/* avatar */}
                   <div className=' mb-1 flex items-center text-black rounded-full'>
@@ -141,9 +140,9 @@ getDownloadURL(uploadTask.snapshot.ref).then(async(downloadURL) => {
                   (<div className='flex justify-end items-end'>
                 <img
                 src={img.url}
-                className={` flex justify-end items-end ml-2 object-cover rounded-full w-[40px] h-[40px] border-2 border-indigo-400 p-0.5`}
+                className={` flex  ml-2 object-cover rounded-full w-[40px] h-[40px] border-2 border-indigo-400 p-0.5`}
                 /> 
-                 {currentUser.checks?.isVerify && ( <FaCircleCheck className=' absolute justify-self-end items-end rounded-full bg-white text-blue-600 mb-1'/>)}
+                 {currentUser.checks && ( <FaCircleCheck className={` mb-1 absolute justify-self-end items-end rounded-full bg-white ${currentUser.checks?.isAdmin && "text-green-600" || currentUser.checks?.isVerify && "text-blue-600" }`}/>)}
                   </div>)}
                   
 
@@ -157,9 +156,8 @@ getDownloadURL(uploadTask.snapshot.ref).then(async(downloadURL) => {
         readOnly={!isTodoEditable}
         onChange={(event) => {
           if (event.target.files && event.target.files[0]) {
-            if (event.target.files[0].size > 1 * 1000 * 1024) {
-            setError("File with maximum size of 1MB is allowed")
-              console.log("File with maximum size of 1MB is allowed");
+            if (event.target.files[0].size > 0.3 * 1000 * 1024) {
+            setError("File with maximum size of 300KB is allowed")
               return false;
             }
               setError('')
@@ -174,17 +172,23 @@ getDownloadURL(uploadTask.snapshot.ref).then(async(downloadURL) => {
                   </div>
                   </label>
                 </div>
+                {!currentUser.checks?.isVerify && (<div className=' flex flex-wrap  items-center'>
+                   <FaCircleExclamation className=' flex-wrap text-red-600 opacity-70 bg-white rounded-full'/>
+                   <div className=' text-red-700 ml-2'>
+                    Contact admins to get verified !!!, non-verified accounts will be disabled
+                   </div>
+                   </div>)}
 
                 {/* full-name */}
                 <div className='mb-1 flex items-center text-black  '>
                   {/* label */}
                 <label className=' font-semibold' htmlFor="name">Name: </label>
                 {/* input */}
-                  <input type="text" 
+                  <input type="text"
                   id='name'
                   className={` ${
-                    isTodoEditable ? "border-black border-[2px] rounded-md px-2" : "border-transparent"
-                } m-auto ml-2 flex bg-transparent border-transparent cursor-pointer hover:border-transparent`}
+                    isTodoEditable ? "border-black  border-[2px] rounded-md px-2" : " border-none"
+                } capitalize m-auto ml-2 flex bg-transparent border-transparent cursor-pointer hover:border-transparent`}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   readOnly={!isTodoEditable}/>
@@ -222,6 +226,12 @@ getDownloadURL(uploadTask.snapshot.ref).then(async(downloadURL) => {
                     }}
                   readOnly={!isTodoEditable}/>
                 </div>
+                {currentUser.rollNo ==="" && (<div className=' flex  items-center'>
+                   <FaCircleExclamation className=' text-red-600 opacity-70 bg-white rounded-full'/>
+                   <div className=' text-red-700 ml-2'>
+                    Kindly update your roll no !!!
+                   </div>
+                   </div>)}
                 </div>
                 
 

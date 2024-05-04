@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { AdUsersCtrl, UploadForm } from '../components'
+import { AdUsersCtrl, SearchAdmin, UploadForm } from '../components'
 import {FaPlus} from 'react-icons/fa'
 import { useSelector } from 'react-redux'
 
@@ -27,6 +27,8 @@ function Admin() {
 
       {/* upload form */}
       <UploadForm currentUser={Object(userf)} click={()=>setFormStatus(!formStatus)} className={` ${formStatus? 'block': 'hidden'}`}/>
+
+      <SearchAdmin/>
 
       {/* user-ctrl-panel */}
       <AdUsersCtrl/>

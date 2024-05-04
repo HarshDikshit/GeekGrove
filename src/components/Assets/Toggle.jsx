@@ -20,7 +20,7 @@ function Toggle({uid,
                 setEnabled(data.data().checks.isAdmin)
         })
     })                
-    },[enabled]) 
+    },[enabled, uid]) 
         
 
         const authStatus = useSelector((state)=> state.auth.status)

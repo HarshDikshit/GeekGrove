@@ -10,27 +10,30 @@ import Loading from '../Loading'
 function AdUsersCtrl() {
 
   const [data,setData] = useState([])
+  const [token,setToken] = useState('All')
   const [loading, setLoading] = useState(true)
   
 
   const userArr = async ()=>{
     try {
-      const fetchData = await service.getDocs();
+      const fetchData = await service.getDocs()
       setLoading(false)
       setData(fetchData);
     } catch (error) {
-      console.log(error.code);
+      console.log(error);
     } 
   }
  
 
 useEffect( ()=> {
   userArr()
+  
 },[])
  
   return (
 <>
 <div className=" my-2">
+
 <table className="table-fixed w-[90%] m-auto">
    
   <thead className=' w-full bg-slate-300 rounded-md'>

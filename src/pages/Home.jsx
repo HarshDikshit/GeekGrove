@@ -1,7 +1,7 @@
   import React, { useEffect, useState } from 'react'
   import service from '../Firebase/conf'
   import authService from '../Firebase/auth'
-import { Alert, Carousal, Toggle } from '../components'
+import { Alert, Carousal, StudyTable, Toggle } from '../components'
 import { useSelector, useDispatch } from 'react-redux'
 import postUploadService from '../Firebase/post'
 import {FaTrash} from 'react-icons/fa6'
@@ -57,12 +57,9 @@ useEffect( ()=> {
     
     </div>
 
-  {/* below */}
- <div className=" w-full dark:bg-slate-600">
-  {/*main */}
-  <div className=" flex flex-wrap justify-center">
-  </div>
- </div>
+<div>
+  <StudyTable/>
+</div>
   </>
 
 
