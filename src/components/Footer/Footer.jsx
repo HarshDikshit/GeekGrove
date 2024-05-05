@@ -104,24 +104,6 @@ overflow-hidden pt-10 bg-gray-400 border border-t-2 border-t-gray-300'>
 
   </div>
 
-
-{/* 2nd heading */}
-  <div className=" flex flex-col w-full px-8 md:px-40 justify-center">
-
-<div className=' flex flex-col justify-center '>
-<h1 className=' justify-self-center text-gray-800 uppercase font-bold text-2xl my-2'>Administrators</h1>
-<div className=' bg bg-yellow-400 w-[220px] h-[3px] justify-self-center'></div>
-</div>
-
-<div>
-  <ul className=' text-gray-200 justify-center my-2 ml-6 flex flex-col  font-semibold'>
-    <li>Harsh Dixit</li>
-    <li>Arpit pandey</li>
-    <li>Harsh Mishra</li>
-  </ul>
-</div>
-
-</div>
 </div>
 </div>
 
@@ -157,7 +139,7 @@ overflow-hidden pt-10 bg-gray-400 border border-t-2 border-t-gray-300'>
 
 <div>
   <ul className=' text-gray-200 justify-center my-2 ml-6 flex flex-col  font-semibold'>
-    <li>abc@gmail.com</li>
+    <li>[harshdixitofficial@gmail.com]</li>
   </ul>
 </div>
 

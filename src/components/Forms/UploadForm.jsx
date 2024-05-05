@@ -87,12 +87,8 @@ uploadTask.on('state_changed',
               setError("")
               setLoading(false)
               setFile("")
-            })
-            .catch((e)=> {
-              setLoading(false)
-              console.log(e);
-              setError(e.code)
-              setSuccess("")
+              setTimeout(()=>{setFile("")
+              click()},2000)
             })
     });
   }
@@ -104,6 +100,9 @@ uploadTask.on('state_changed',
               setSuccess('uploaded success')
               setError("")
               setLoading(false)
+              
+              setTimeout(()=>{setFile("")
+                click()},2000)
             })
             .catch((e)=> {
               setLoading(false)
@@ -112,8 +111,7 @@ uploadTask.on('state_changed',
               setSuccess("")
             })
         }
-        setFile("")
-        setTimeout(()=>{click()},2000)
+       
       }
     }
 

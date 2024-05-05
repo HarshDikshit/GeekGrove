@@ -61,12 +61,31 @@ useEffect( ()=> {
   return (
   <>
   <div  className=" m-auto">
-    <Carousal  autoSlide={true}>
+     {/* when no images fetched */}
+     {slides.length===0?  (
+       <div className='  flex top-0 left-0  p-4'>
+        <p>No Carousal images fetched...</p>
+        
+        { (
+        <div className='p-2  bg-opacity-[40%] gap-2 flex bg-black rounded-lg'>
+        <FaPlusCircle  onClick={()=> setAddDialog({status: !addDialog.status})}  className=' text-xl cursor-pointer text-white'/>
+        </div>
+      )}
+       </div>)
+   
+
+    :
+    // Carousal images
+   ( <Carousal  autoSlide={true}>
       {/* img mapping */}
       {slides.map((s)=> (
+
+        
         <div className=' min-w-full'>
+          
+        
           {/* create window */}
-          {adminStatus===true && (
+          { (
         <div className='absolute flex items-start justify-end p-4'>
         <div className='p-2  bg-opacity-[40%] gap-2 flex bg-black rounded-lg'>
         <FaPlusCircle  onClick={()=> setAddDialog({status: !addDialog.status, data: s})}  className=' text-xl cursor-pointer text-white'/>
@@ -80,8 +99,8 @@ useEffect( ()=> {
         </div>
       ))
       }
-      
-    </Carousal>
+    </Carousal>)
+     }
 
    
     

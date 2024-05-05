@@ -92,8 +92,8 @@ function AddDialog({className='',click, currentUser=''}) {
                 accept="image/*"
                 onChange={(event) => {
                 if (event.target.files && event.target.files[0]) {
-                if (event.target.files[0].size > 1 * 1000 * 1024) {
-                setError("File with maximum size of 1 MB is allowed")
+                if (event.target.files[0].size > 0.7 * 1000 * 1024) {
+                setError("File with maximum size of 700KB is allowed")
                 return false;
             }
                 setError('')
