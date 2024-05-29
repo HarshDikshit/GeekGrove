@@ -8,12 +8,12 @@ import { useSelector } from 'react-redux'
 
 function Admin() {
 
-  const [formStatus, setFormStatus] = useState(false)
+  const [formStatus, setFormStatus] = useState(false) 
 
   const userf = useSelector((state) => state.auth.userData)
   
   return (
-    <div className=' z-[3] min-h-full'>
+    <div className=' z-[3] min-h-full'>  <div></div>
       {/* nav-admin */}
        <div className=' flex items-center justify-end py-1 px-5 w-full bg-gray-400 text-white' > 
       {/* add-btn */}
