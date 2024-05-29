@@ -1,7 +1,7 @@
   import React, { useEffect, useState } from 'react'
   import service from '../Firebase/conf'
   import authService from '../Firebase/auth'
-import { Alert, Carousal,AddDialog, DeleteDialog, StudyTable, Toggle } from '../components'
+import { Alert, Carousal,AddDialog, DeleteDialog, StudyTable, Toggle, UpdatesTable } from '../components'
 import { useSelector, useDispatch } from 'react-redux'
 import postUploadService from '../Firebase/post'
 import {FaTrash, FaTrashCan} from 'react-icons/fa6'
@@ -59,7 +59,8 @@ useEffect( ()=> {
     
 
   return (
-  <>
+  <div className=' dark:bg-slate-600'>
+  {/* carousal */}
   <div  className=" m-auto">
      {/* when no images fetched */}
      {slides.length===0?  (
@@ -71,25 +72,20 @@ useEffect( ()=> {
         <FaPlusCircle  onClick={()=> setAddDialog({status: !addDialog.status})}  className=' text-xl cursor-pointer text-white'/>
         </div>
       )}
-       </div>)
-   
-
+      </div>)
     :
     // Carousal images
-   ( <Carousal  autoSlide={true}>
+    ( <Carousal  autoSlide={true}>
       {/* img mapping */}
       {slides.map((s)=> (
-
-        
         <div className=' min-w-full'>
-          
         
           {/* create window */}
           { (
         <div className='absolute flex items-start justify-end p-4'>
         <div className='p-2  bg-opacity-[40%] gap-2 flex bg-black rounded-lg'>
         <FaPlusCircle  onClick={()=> setAddDialog({status: !addDialog.status, data: s})}  className=' text-xl cursor-pointer text-white'/>
-        <FaTrashCan onClick={()=> setDeleteDialog({status: !deleteDialog.status, data: s})}  className=' text-xl cursor-pointer text-white'/>
+        {adminStatus===true && (<FaTrashCan onClick={()=> setDeleteDialog({status: !deleteDialog.status, data: s})}  className=' text-xl cursor-pointer text-white'/>)}
         </div>
         </div>
         )}
@@ -97,22 +93,14 @@ useEffect( ()=> {
         {/* img */}
         <img className=' cursor-pointer min-w-full' src={s.post.file}/>
         </div>
-      ))
-      }
-    </Carousal>)
-     }
-
-   
-    
+      ))}
+    </Carousal>)}
     </div>
 
     <DeleteDialog data={deleteDialog.data}  click={()=>setDeleteDialog(!deleteDialog.status)} className={` ${deleteDialog.status? 'block': 'hidden'}`}  />
     <AddDialog currentUser={userf} data={addDialog.data}  click={()=>setAddDialog(!addDialog.status)} className={` ${addDialog.status? 'block': 'hidden'}`}  />
 
-<div>
-  <StudyTable/>
-</div>
-  </>
+  </div>
 
 
   )}

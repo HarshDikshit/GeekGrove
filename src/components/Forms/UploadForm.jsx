@@ -88,7 +88,8 @@ uploadTask.on('state_changed',
               setLoading(false)
               setFile("")
               setTimeout(()=>{setFile("")
-              click()},2000)
+              click()
+            window.location.reload()},2000)
             })
     });
   }
@@ -102,7 +103,8 @@ uploadTask.on('state_changed',
               setLoading(false)
               
               setTimeout(()=>{setFile("")
-                click()},2000)
+              click()
+              window.location.reload()},2000)
             })
             .catch((e)=> {
               setLoading(false)

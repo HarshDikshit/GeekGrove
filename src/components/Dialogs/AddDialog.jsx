@@ -73,19 +73,19 @@ function AddDialog({className='',click, currentUser=''}) {
         <div id='outer-wrapper'  className={`${className} top-0 left-0 flex justify-center fixed h-full w-full  z-[1] bg-black bg-opacity-60  backdrop-blur-sm  `}>
                 <div className='  w-full  flex flex-col items-center justify-center'>
                 <div onClick={click} className='z-[3] w-full h-screen absolute'></div>
-                <div id='inner-wrapper' className="  mt-12 z-[5] flex flex-col justify-center items-center  md:w-[40%] w-[80%] bg-white rounded-md shadow-sm shadow-black p-2">
+                <div id='inner-wrapper' className="  mt-12 z-[5] flex flex-col justify-center items-center  md:w-[40%] w-[80%] bg-white rounded-md shadow-sm shadow-black p-2 dark:bg-slate-700">
                     {/* items */}
 
                     <div className=" w-[80%] flex flex-col justify-center my-8">
                         {/* heading */}
                 <div className=' flex items-center justify-center'>
-                  <h1 className=' uppercase text-black font-bold text-xl flex m-auto mb-2'>Add Images</h1>
+                  <h1 className=' uppercase text-black dark:text-slate-300 font-bold text-xl flex m-auto mb-2'>Add Images</h1>
                   </div>
 
                 {/* file */}
                 <div className=' flex flex-wrap p-2 m-auto'>
                 <input
-                className=' flex flex-wrap'
+                className=' flex flex-wrap dark:text-slate-300'
                 id='file'
                 name="file"
                 type="file"
@@ -110,7 +110,7 @@ function AddDialog({className='',click, currentUser=''}) {
                 {/* btns */}
                   <div className=' flex items-center justify-center'>
                      {/* cancel btn */}
-                  <button onClick={click} className=' flex bg-gray-700 justify-center items-center text-white rounded-md border-[2px] border-gray-400 font-bold p-2 mx-2'>Cancel</button>
+                  <button onClick={click} className=' flex bg-gray-700 dark:bg-slate-700 justify-center items-center text-white rounded-md border-[2px] border-gray-400 font-bold p-2 mx-2'>Cancel</button>
 
                      {/* add btn */}
                   <button  onClick={handleSubmit}   className=' gap-2 flex bg-green-700 justify-center items-center text-white rounded-md border-[2px] border-green-400 font-bold p-2 mx-2'>  Add <FaPlusCircle className=' text-white'/>

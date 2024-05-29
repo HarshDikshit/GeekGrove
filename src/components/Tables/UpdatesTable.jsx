@@ -10,7 +10,7 @@ import { FaPlusCircle } from 'react-icons/fa'
 
 
 
-function StudyTable() {
+function UpdatesTable() {
 
     const [data,setData] = useState([])
     const [loading, setLoading] = useState(true)
@@ -29,7 +29,7 @@ function StudyTable() {
     
     const userArr = async ()=>{
         try {
-        const fetchData = await postUploadService.getStudyDocs({token:'study'});
+        const fetchData = await postUploadService.getStudyDocs({token:'update'});
         setLoading(false)
         setData(fetchData);
         } catch (error) {
@@ -44,10 +44,10 @@ function StudyTable() {
     
     return (
     <>
-    <div className="rounded-md shadow-sm shadow-black dark:bg-slate-700 pb-4">
+    <div className="rounded-md shadow-sm shadow-black pb-4  dark:bg-slate-700 ">
         <div className=' flex w-full p-2'>
             {/* heading */}
-        <h2 className=' grow flex justify-center my-2 font-bold dark:text-slate-300'>Study Material</h2>
+        <h2 className=' grow flex justify-center my-2 font-bold dark:text-slate-300'>Updates</h2>
 
         {/* create btn */}
         {adminStatus=== true && ( <div onClick={()=>{setFormStatus(!formStatus)}} className=' cursor-pointer  flex justify-center items-center text-white font-semibold bg-blue-500 p-2 rounded-md'>
@@ -80,9 +80,10 @@ function StudyTable() {
     
     <tbody>
         
+        
         {data.map((data) =>{
         return(
-        <tr key={data.id} className=' w-full odd:bg-gray-100 even:bg-white rounded-md dark:odd:bg-slate-500 dark:even:bg-slate-600 '>
+        <tr key={data.id} className=' w-full odd:bg-gray-100 even:bg-white dark:odd:bg-slate-500 dark:even:bg-slate-600 rounded-md'>
     
         
         
@@ -97,9 +98,8 @@ function StudyTable() {
             {/* view btn */}
             <div>
             <div className=' cursor-pointer text-gray-600 font-semibold mx-2 flex justify-center items-center '>
-            {data.post.file!=='' && (<Link to={data.post.file} download><FaDownload className=' text-blue-700 dark:text-blue-400'/></Link>
-            )}      
-            </div>
+            {data.post.file!=='' && (  <Link to={data.post.file} download><FaDownload className=' text-blue-700 dark:text-blue-400'/></Link> )}
+                </div>
             </div>
         </td>
 
@@ -108,7 +108,7 @@ function StudyTable() {
         <td>
             <div onClick={handleEdit}>
             <div className=' cursor-pointer text-gray-600 font-semibold mx-2 flex justify-center items-center '>
-                <FaPenToSquare className=' text-green-700 dark:text-green-500'/>
+                <FaPenToSquare className=' text-green-700'/>
                 </div>
             </div>
         </td>
@@ -119,7 +119,7 @@ function StudyTable() {
         <td>
             <div onClick={()=> setDeleteDialog({status: !deleteDialog.status, data: data})}>
             <div className=' cursor-pointer text-gray-600 font-semibold mx-2 flex justify-center items-center '>
-                <FaTrashCan className=' text-red-700 dark:text-red-500'/>
+                <FaTrashCan className=' text-red-700'/>
                 </div>
             </div>
         </td>
@@ -131,8 +131,8 @@ function StudyTable() {
     </tbody>
     </table>
     {data.length===0 && (
-        <div className=' m-auto dark:text-slate-300 '>
-            Nothing to see here...
+        <div className=' m-auto dark:text-slate-300  '>
+            No updates available...
         </div>
     )}
     <Loading text="Loading, please wait..." className={`${loading? 'block': 'hidden'} m-auto justify-center items-center dark:text-slate-300 `}/>
@@ -145,4 +145,4 @@ function StudyTable() {
     
     
 
-export default StudyTable
+export default UpdatesTable

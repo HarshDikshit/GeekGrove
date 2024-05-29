@@ -36,9 +36,9 @@ export class PostUploadService{
     }
 
     // study-docs
-    async getStudyDocs(){
+    async getStudyDocs({token}){
         try {
-            const dbref = query(collection(db,'study'), orderBy("createdAt", "desc"))
+            const dbref = query(collection(db,token), orderBy("createdAt", "desc"))
             const snapshot= await getDocs(dbref);
             return snapshot.docs.map((doc=> ({id: doc.id, ...doc.data()})))
         } catch (error) {

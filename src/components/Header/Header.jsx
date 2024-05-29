@@ -4,7 +4,7 @@ import {LogoutBtn, ThemeBtn} from '../index'
 import {useSelector} from 'react-redux'
 import authSlice from '../../store/authSlice'
 import Profile from './Profile'
-
+import {FaStumbleuponCircle} from 'react-icons/fa6'
 
 
 
@@ -51,12 +51,13 @@ function Header() {
   <div onClick={() =>open && setOpen(!open)} className={`${open? "block":"hidden"} absolute z-[3] h-full w-full`}></div>
 
 
-    <nav className=' bg-indigo-400 flex shadow-md z-[5]'> 
-      <div className='bg-indigo-400 md:flex flex z-[5]  h-12 relative justify-between  w-full shadow-md md:shadow-none     px-7
+    <nav className=' bg-blue-500 flex shadow-md z-[5]'> 
+      <div className='bg-blue-500 md:flex flex z-[5]  h-12 relative justify-between  w-full shadow-md md:shadow-none     px-7
     items-center'>
   
       {/* logo goes here */}
-    <div><img className='  h-10 w-10 rounded-full border-indigo-300 border-2' src="/logo/iert-logo.jpg" alt='logo' /></div>
+    <div className=' flex justify-center items-center'><img className='  h-10 w-10 rounded-full border-indigo-300 border-2' src="/logo/logo.png" alt='logo' />
+    <span className=' text-xl text-white font-bold p-2'>GEEK GROVE</span></div>
       {/* logo ends here */}
 
       {/* theme button goes here */}
@@ -73,8 +74,9 @@ function Header() {
 {/* hamburger icon ends here */}
     </div>
     {/* nav items goes here */}
-    <ul className= {`text-white md:py-0 py-6 pt-2 md:pt-0 md:flex md:items-center  ml-auto absolute md:static bg-indigo-400
-      md:z-[5] z-[4] left-0 w-full md:w-auto md:pl-0 pl-9 transition-all duration-500 ease-in-out md:rounded-b-none rounded-b-lg ${open? 'top-12': 'top-[-490px] ' } `}>
+    <div id='outer-wrapper'  className={`${open? 'block': 'hidden'} top-0 left-0 flex justify-center fixed h-full w-full  z-[1] bg-black bg-opacity-60  backdrop-blur-sm  `}></div>
+    <ul className= {`text-white md:py-0 py-6 pt-2 md:pt-0 md:flex md:items-center  ml-auto absolute md:static bg-blue-500
+      md:z-[5] z-[4] left-0 w-full md:w-auto md:pl-0 pl-9 transition-all duration-500 ease-in-out md:rounded-b-none rounded-b-lg backdrop: ${open? 'top-12': 'top-[-490px] ' } `}>
             {navItems.map((item) => 
             item.active ? (
               <li key={item.name}>

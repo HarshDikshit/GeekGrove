@@ -75,7 +75,7 @@ function Footer() {
 return (
     <>
 <div className=' items-end w-full  justify-evenly
-overflow-hidden pt-10 bg-gray-400 border border-t-2 border-t-gray-300'>
+overflow-hidden  bg-gray-400 border border-t-2 border-t-gray-300'>
 
 {/* main div */}
 <div className=' flex md:flex-nowrap flex-wrap items-center justify-center m-auto'>

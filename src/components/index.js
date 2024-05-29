@@ -15,6 +15,8 @@ import Loading from "./Loading";
 import SearchAdmin from "./Search/SearchAdmin";
 import AdUsersCtrl from "./Tables/AdUsersCtrl";
 import StudyTable from "./Tables/StudyTable";
+import UpdatesTable from "./Tables/UpdatesTable";
+
 
 
 
@@ -36,4 +38,5 @@ export {
     StudyTable,
     DeleteDialog,
     AddDialog,
+    UpdatesTable
 }
